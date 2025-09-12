@@ -1,4 +1,4 @@
-namespace Crud_MVC.Models
+namespace Crud_MVC.Models.ViewModels
 {
     public class ErrorViewModel
     {
