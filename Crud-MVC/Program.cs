@@ -1,3 +1,6 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Crud_MVC.Data;
 namespace Crud_MVC
 {
     public class Program
@@ -5,6 +8,8 @@ namespace Crud_MVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<Crud_MVCContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Crud_MVCContext") ?? throw new InvalidOperationException("Connection string 'Crud_MVCContext' not found.")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
