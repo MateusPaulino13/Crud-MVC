@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Crud_MVC.Data;
+using Crud_MVC.Services;
 namespace Crud_MVC
 {
     public class Program
@@ -14,9 +15,11 @@ namespace Crud_MVC
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<SeedingService>();
+            builder.Services.AddScoped<SellerService>();
 
             var app = builder.Build();
             var seedingService = app.Services.CreateScope().ServiceProvider.GetRequiredService<SeedingService>();
+            var sellerService = app.Services.CreateScope().ServiceProvider.GetRequiredService<SellerService>();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
