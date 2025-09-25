@@ -16,10 +16,12 @@ namespace Crud_MVC
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<SeedingService>();
             builder.Services.AddScoped<SellerService>();
+            builder.Services.AddScoped<DepartmentService>();
 
             var app = builder.Build();
             var seedingService = app.Services.CreateScope().ServiceProvider.GetRequiredService<SeedingService>();
             var sellerService = app.Services.CreateScope().ServiceProvider.GetRequiredService<SellerService>();
+            var departmentService = app.Services.CreateScope().ServiceProvider.GetRequiredService<DepartmentService>();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
