@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Crud_MVC.Data;
 using Crud_MVC.Services;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 namespace Crud_MVC
 {
     public class Program
@@ -23,6 +25,14 @@ namespace Crud_MVC
             var sellerService = app.Services.CreateScope().ServiceProvider.GetRequiredService<SellerService>();
             var departmentService = app.Services.CreateScope().ServiceProvider.GetRequiredService<DepartmentService>();
 
+            var enUS = new CultureInfo("en-US");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(enUS),
+                SupportedCultures = new List<CultureInfo> { enUS },
+                SupportedUICultures = new List<CultureInfo> { enUS }
+            };
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -32,6 +42,8 @@ namespace Crud_MVC
             }
 
             seedingService.Seed();
+
+            app.UseRequestLocalization(localizationOptions);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
