@@ -1,5 +1,6 @@
 ﻿using Crud_MVC.Data;
 using Crud_MVC.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Crud_MVC.Services
 {
@@ -25,7 +26,7 @@ namespace Crud_MVC.Services
 
         public Seller FindById(int id)
         {
-            return _context.Seller.FirstOrDefault(s => s.Id == id);
+            return _context.Seller.Include(d => d.Department).FirstOrDefault(s => s.Id == id);
         }
 
         public void Remove(int id)
