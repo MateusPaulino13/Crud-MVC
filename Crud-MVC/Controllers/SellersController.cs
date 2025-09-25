@@ -1,6 +1,7 @@
 ﻿using Crud_MVC.Models;
 using Crud_MVC.Models.ViewModels;
 using Crud_MVC.Services;
+using Crud_MVC.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crud_MVC.Controllers
@@ -61,6 +62,40 @@ namespace Crud_MVC.Controllers
                 return NotFound();
 
             return View(seller);
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            var seller = _sellerService.FindById(id.Value);
+
+            if (id == null || seller == null)
+                return NotFound();
+
+            List<Department> departments = _departmentService.FindAll();
+            SellerFormViewModel viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Seller seller)
+        {
+            if (id != seller.Id)
+                return BadRequest();
+
+            try
+            {
+                _sellerService.Update(seller);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (DbConcurrencyException)
+            {
+                return BadRequest();
+            }
         }
     }
 }

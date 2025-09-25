@@ -1,5 +1,6 @@
 ﻿using Crud_MVC.Data;
 using Crud_MVC.Models;
+using Crud_MVC.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Crud_MVC.Services
@@ -35,6 +36,22 @@ namespace Crud_MVC.Services
             
             _context.Seller.Remove(seller);
             _context.SaveChanges();
+        }
+
+        public void Update(Seller seller)
+        {
+            if (!_context.Seller.Any(s => s.Id == seller.Id))
+                throw new NotFoundException("Id not found");
+
+            try
+            {
+                _context.Update(seller);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                throw new DbUpdateConcurrencyException(e.Message);
+            }
         }
     }
 }
