@@ -19,11 +19,13 @@ namespace Crud_MVC
             builder.Services.AddScoped<SeedingService>();
             builder.Services.AddScoped<SellerService>();
             builder.Services.AddScoped<DepartmentService>();
+            builder.Services.AddScoped<SalesRecordService>();
 
             var app = builder.Build();
             var seedingService = app.Services.CreateScope().ServiceProvider.GetRequiredService<SeedingService>();
             var sellerService = app.Services.CreateScope().ServiceProvider.GetRequiredService<SellerService>();
             var departmentService = app.Services.CreateScope().ServiceProvider.GetRequiredService<DepartmentService>();
+            var salesRecordService = app.Services.CreateScope().ServiceProvider.GetRequiredService<SalesRecordService>();
 
             var enUS = new CultureInfo("en-US");
             var localizationOptions = new RequestLocalizationOptions
