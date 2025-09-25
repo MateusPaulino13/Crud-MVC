@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Crud_MVC.Migrations
 {
     [DbContext(typeof(Crud_MVCContext))]
-    [Migration("20250912141435_OutherEntites")]
-    partial class OutherEntites
+    [Migration("20250925120700_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
