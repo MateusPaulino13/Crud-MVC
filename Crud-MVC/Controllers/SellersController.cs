@@ -3,6 +3,7 @@ using Crud_MVC.Models.ViewModels;
 using Crud_MVC.Services;
 using Crud_MVC.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Crud_MVC.Controllers
 {
@@ -41,7 +42,7 @@ namespace Crud_MVC.Controllers
             var seller = _sellerService.FindById(id.Value);
 
             if (id == null || seller == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "Id not found" });
 
             return View(seller);
         }
@@ -59,7 +60,7 @@ namespace Crud_MVC.Controllers
             var seller = _sellerService.FindById(id.Value);
 
             if (id == null || seller == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "Id not found" }); ;
 
             return View(seller);
         }
@@ -69,7 +70,7 @@ namespace Crud_MVC.Controllers
             var seller = _sellerService.FindById(id.Value);
 
             if (id == null || seller == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "Id not found" }); ;
 
             List<Department> departments = _departmentService.FindAll();
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
@@ -81,21 +82,28 @@ namespace Crud_MVC.Controllers
         public IActionResult Edit(int id, Seller seller)
         {
             if (id != seller.Id)
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { Message = "Id mismatch" }); ;
 
             try
             {
                 _sellerService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundException)
+            catch (ApplicationException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = e.Message });
             }
-            catch (DbConcurrencyException)
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
             {
-                return BadRequest();
-            }
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+
+            return View(viewModel);
         }
     }
 }
